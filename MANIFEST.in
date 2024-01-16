@@ -1,0 +1,10 @@
+include LICENSE
+include README.md
+recursive-include payment/templates/payment *.html
+recursive-include payment/templates/base_templates *.html
+recursive-include payment/templates/email_sender *.html
+recursive-include payment/static/css *.css
+recursive-include payment/static/js *.js
+recursive-include payment/email_sender *.py
+recursive-include payment *.py
+recursive-include docs *
