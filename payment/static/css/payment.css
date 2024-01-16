@@ -1,0 +1,130 @@
+/* Set margins for the main container */
+.main-container {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* Center and set max width for the body container */
+.body-container {
+    margin: 0 auto;
+    max-width: 1080px;
+    padding: 0 15px;
+}
+
+/* Set display and margin for page body */
+.page-body {
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+}
+
+/* Set flex for appointment user info */
+.appointment-user-info {
+    flex: 2;
+}
+
+.checkout-info {
+    flex: 1;
+    margin-left: 20px; /* Adjust the value as needed */
+    max-width: 340px;
+}
+
+/* Set flex and margin for service description and pay */
+.service-description-and-pay {
+    background: #f5f5f5;
+    padding: 25px 30px 20px;
+}
+
+.securePayment {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-family: "DejaVu Serif", serif;
+}
+
+.padlock {
+    margin-top: -18px;
+    margin-right: 5px;
+}
+
+/* Set margins and font styles for title sections */
+.appointment-user-info-title, .service-details-title, .payment-details-title {
+    margin-bottom: 10px;
+    font-family: "DejaVu Serif", serif;
+    font-size: 18px;
+    color: #0c042c;
+}
+
+/* Set font styles for description titles */
+.description-title {
+    font-size: 16px;
+    font-weight: 400;
+    color: #0c042c;
+}
+
+
+/* Set font styles for input labels */
+label {
+    font-family: "DejaVu Serif", serif;
+}
+
+/* Set margin for second part horizontal line */
+.second-part {
+    margin-top: 10px;
+}
+
+/* Set grid display, padding, and margin for user info input fields */
+.user-info-input {
+    margin-top: 20px;
+    display: grid;
+    padding: 30px 10px;
+}
+
+/* Set grid display, padding, margin, and font styles for service description */
+.service-description-content {
+    color: black;
+    padding-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5px;
+    font-family: "DejaVu Serif", serif;
+    font-size: 16px;
+}
+
+/* Set font style for service name */
+.item-name {
+    color: black;
+}
+
+/* Set flex for title section */
+.title {
+    flex: 1;
+}
+
+/* Set padding, border radius, and font styles for input fields */
+.user-info input {
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* Style for the payment total */
+.total, .subTotal, .salesTax {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "DejaVu Serif", serif;
+    color: rgba(12, 4, 44, 0.93);
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.total {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 500;
+}

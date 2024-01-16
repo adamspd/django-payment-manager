@@ -1,0 +1,431 @@
+{% extends PAYMENT_BASE_TEMPLATE %}
+{% load i18n %}
+{% block title %}
+Payment Success
+{% endblock %}
+
+{% block description %}
+{% trans 'Your payment was successful! Thank you for your purchase.' %}
+{% endblock %}
+
+{% block body %}
+<div class="main-content">
+    <div style="margin: 0 auto; max-width: 900px; padding: 50px">
+        <div class="payment-order">
+            <p class="payment-notice payment-notice--{{ status }}">
+                Payment status : <strong>{{ payment_info.get_status }}</strong>
+            </p>
+            <ul class="payment-order-overview payment-thankyou-order-details order_details">
+                <li class="payment-order-overview__order order">
+                    Order number: <strong>{{ payment_info.get_order_id }}</strong>
+                </li>
+                <li class="payment-order-overview__date date">
+                    Date: <strong>{{ current_date }}</strong>
+                </li>
+                <li class="payment-order-overview__total total">
+                    Total: <strong><span class="payment-Price-amount amount">
+                    <span class="payment-Price-currencySymbol">
+                        {{ payment_info.get_currency }}</span>{{ payment_info.get_total_amount }}</span></strong>
+                </li>
+                <li class="payment-order-overview__payment-method method">
+                    Payment method: <strong>Check payments</strong>
+                </li>
+            </ul>
+            <section class="payment-order-details">
+                <h3 class="payment-order-details__title">Payment details</h3>
+                <table class="payment-table payment-table--order-details shop_table order_details">
+                    <thead>
+                    <tr>
+                        <th class="payment-table__product-name product-name">Service / Product</th>
+                        <th class="payment-table__product-table product-total">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="payment-table__line-item order_item">
+                        <td class="payment-table__product-name product-name">
+                            <a href="#">
+                                {{ linked_object }}
+                            </a> <strong class="product-quantity"></strong></td>
+                        <td class="payment-table__product-total product-total">
+                            <span class="payment-Price-amount amount"><span class="payment-Price-currencySymbol">
+                                {{ payment_info.get_currency }}</span>{{ payment_info.get_amount }}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th scope="row">Subtotal:</th>
+                        <td><span class="payment-Price-amount amount"><span class="payment-Price-currencySymbol">
+                            {{ payment_info.get_currency }}</span>{{ payment_info.get_amount }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Taxes:</th>
+                        <td><span class="payment-Price-amount amount"><span class="payment-Price-currencySymbol">
+                            {{ payment_info.get_currency }}</span>{{ payment_info.get_fee }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Payment method:</th>
+                        <td>Check payments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total:</th>
+                        <td><span class="payment-Price-amount amount"><span class="payment-Price-currencySymbol">
+                            {{ payment_info.get_currency }}</span>{{ payment_info.get_total_amount }}</span>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <section class="payment-customer-details">
+                    <h3>Customer details</h3>
+                    <table class="payment-table payment-table--customer-details shop_table customer_details">
+                        <tbody>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{ user_email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Name:</th>
+                            <td>{{ first_name }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--?<h3 class="payment-column__title">Billing address</h3>
+                    <address>
+                        An Luu
+                        <br>An
+                        <br>123 Luu Binh An
+                        <br>Viet Nam
+                        <br>Vietnam
+                    </address>-->
+                </section>
+            </section>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+{% block customCSS %}
+<style>
+    .main-content {
+        font-size: 1rem;
+        color: var(--color-primary-text);
+        text-rendering: optimizelegibility;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust: none;
+        font-family: Arial, sans-serif
+    }
+
+    a {
+        color: rgb(51, 51, 51);
+        text-decoration: none;
+        outline: 0;
+        cursor: pointer
+    }
+
+    a:focus, a:hover {
+        color: rgba(51, 51, 51, 0.8);
+        -webkit-transition: all .2s ease-in-out;
+        -moz-transition: all .2s ease-in-out;
+        -ms-transition: all .2s ease-in-out;
+        -o-transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out
+    }
+
+    :root {
+        --color-primary: #00A5B4;
+        --color-secondary: #C9DC08;
+        --color-gray-100: #F7FAFC;
+        --color-primary-text: #333;
+        --color-gray-400: #CBD5E0;
+        --color-red: #e41919;
+        --color-border: #e1e3ea;
+        --breakpoint-xs: 600px
+    }
+
+    .payment-info a {
+        font-weight: 700;
+        text-decoration: underline
+    }
+
+    .payment-notice--success {
+        background: #e6f7e4;
+        margin-top: 10px;
+        padding: 15px;
+        color: #39b44a;
+        font-weight: 700;
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, .7)
+    }
+
+    .payment-notice--warning {
+        background: #f7f3e4;
+        margin-top: 10px;
+        padding: 15px;
+        color: #b49b39;
+        font-weight: 700;
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, .7)
+    }
+
+    .payment-notice--danger {
+        background: #f7e4e7;
+        margin-top: 10px;
+        padding: 15px;
+        color: #b4394b;
+        font-weight: 700;
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, .7)
+    }
+
+    .shop_table {
+        width: 100%;
+        margin-bottom: 2rem;
+        max-width: 100%;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-collapse: collapse;
+        border-spacing: 0
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table [data-label] {
+            position: relative;
+            padding-left: 30%
+        }
+
+        .shop_table [data-label]:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 8px;
+            content: attr(data-label);
+            font-weight: 700
+        }
+    }
+
+    .shop_table thead {
+        background: #f2f2f2
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table thead {
+            display: none
+        }
+    }
+
+    .shop_table thead th {
+        border-bottom: 1px solid #e0e0e0;
+        padding: .7rem
+    }
+
+    .shop_table thead th:last-child {
+        text-align: right
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tbody {
+            display: block
+        }
+    }
+
+    .shop_table tbody td {
+        padding: .7rem;
+        border-color: #f0f2f7
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tbody tr {
+            border-bottom: 1px dotted rgba(0, 0, 0, .1);
+            display: block
+        }
+    }
+
+    .shop_table tbody tr th {
+        text-align: left
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tbody tr th {
+            display: block;
+            padding: .7rem .7rem 0;
+            text-align: left
+        }
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tbody tr td {
+            display: block;
+            padding-top: .5rem;
+            padding-bottom: .5rem
+        }
+    }
+
+    .shop_table tbody tr td:last-child {
+        text-align: right
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tbody tr td:last-child {
+            text-align: left
+        }
+    }
+
+    .shop_table tfoot {
+        border-top: 1px solid #f0f2f7;
+        background: #fafafa
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tfoot {
+            display: block
+        }
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tfoot tr {
+            display: flex
+        }
+    }
+
+    .shop_table tfoot th {
+        padding: .7rem;
+        text-align: right
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tfoot th {
+            width: 30%;
+            padding-top: .2rem;
+            padding-bottom: .2rem;
+            text-align: left
+        }
+    }
+
+    .shop_table tfoot td {
+        padding: .7rem;
+        text-align: right;
+        width: 10%
+    }
+
+    @media (max-width: var(--breakpoint-xs)) {
+        .shop_table tfoot td {
+            width: 70%;
+            padding-top: .2rem;
+            padding-bottom: .2rem;
+            text-align: left;
+            padding-left: 0
+        }
+    }
+
+    .payment-order-overview {
+        background: #f8f8f8;
+        list-style: none;
+        margin: 2rem 0;
+        padding: 0;
+        position: relative;
+        display: flex;
+        align-items: center
+    }
+
+    @media (max-width: 600px) {
+        .payment-order-overview {
+            display: block
+        }
+    }
+
+    .payment-order-overview:after, .payment-order-overview:before {
+        background: -webkit-linear-gradient(transparent 0, transparent 0), -webkit-linear-gradient(135deg, #f8f8f8 33.33%, transparent 33.33%), -webkit-linear-gradient(45deg, #f8f8f8 33.33%, transparent 33.33%);
+        content: "";
+        display: block;
+        position: absolute;
+        top: -16px;
+        left: 0;
+        width: 100%;
+        height: 16px;
+        background-size: 0 100%, 16px 16px, 16px 16px
+    }
+
+    .payment-order-overview:after {
+        top: auto;
+        bottom: -16px;
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg)
+    }
+
+    .payment-order-overview li {
+        padding: 1em 1.618em;
+        font-size: .8em;
+        width: 25%;
+        text-transform: uppercase;
+        border-right: 1px dotted #e3e3e3;
+        text-align: center
+    }
+
+    @media (max-width: 600px) {
+        .payment-order-overview li {
+            width: auto;
+            text-align: left;
+            padding: 10px 0;
+            margin: 0 15px;
+            border-right: none;
+            border-bottom: 1px dotted #e3e3e3
+        }
+
+        .payment-order-overview li:last-child {
+            border-bottom: none
+        }
+    }
+
+    .payment-order-overview li:last-child {
+        border-right: none
+    }
+
+    .payment-table--customer-details {
+        border: none
+    }
+
+    .payment-table--customer-details tbody th {
+        background: #f8f8f8;
+        padding-left: 25px
+    }
+
+    @media (max-width: 600px) {
+        .payment-table--customer-details tbody th {
+            width: 100%;
+            display: block;
+            text-align: left;
+            padding-top: 5px;
+            padding-bottom: 5px
+        }
+    }
+
+    .payment-table--customer-details tbody td {
+        background: #fdfdfd;
+        padding-left: 25px;
+        text-align: left !important
+    }
+
+    .shop_table.payment-table--order-details {
+        box-shadow: 0 0 5px rgba(57, 180, 74, .1)
+    }
+
+    .shop_table.payment-table--order-details thead {
+        background: #000;
+        color: #fff
+    }
+
+    .shop_table.payment-table--order-details thead th {
+        border-bottom: none;
+        font-weight: 400;
+        font-size: .9rem
+    }
+
+    .shop_table.payment-table--order-details thead th.product-name {
+        text-align: left
+    }
+
+    .shop_table.payment-table--order-details tbody td {
+        border-color: #f0f2f7
+    }
+</style>
+{% endblock %}

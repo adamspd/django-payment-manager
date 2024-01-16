@@ -1,0 +1,20 @@
+documentation:
+- "**/*.md"
+- LICENSE
+- "docs/**/*"
+
+dependencies:
+- requirements.txt
+
+enhancement:
+- "**"
+
+github-actions:
+- ".github/**/*"
+
+tests:
+- "payment/tests/**/*"
+
+user-interface:
+- "payment/templates/**/*"
+- "payment/static/**/*"

@@ -1,0 +1,143 @@
+{% extends PAYMENT_BASE_TEMPLATE %}
+{% load i18n %}
+{% load static %}
+{% block customCSS %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/payment.css' %}"/>
+{% endblock %}
+{% block title %}
+Checkout - {{ PAYMENT_WEBSITE_NAME }}
+{% endblock %}
+{% block description %}
+Checkout payment for the service {{ service.get_name }}
+{% endblock %}
+{% block scriptHead %}
+<script src="https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id={{ client_id }}"
+        data-client-token="{{ client_token }}"
+></script>
+{% endblock %}
+{% block body %}
+<div class="main-container">
+<div class="body-container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
+         role="alert">{{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+<form method="post" action=""
+      class="page-body">
+    {% csrf_token %}
+    <div class="appointment-user-info">
+        <div class="appointment-user-info-title">
+            <div id="paypal-button-container" class="paypal-button-container"></div>
+        </div>
+
+    </div>
+
+<div class="checkout-info">
+<div class="service-description-and-pay">
+    <div class="service-details-title">{% trans "Order summary" %}</div>
+<div class="service-description-content">
+    <div class="img-container">
+        <img src="{{ service.get_img_url }}"
+             alt="{{ service.get_name }}"
+             width="50px" height="auto">
+    </div>
+    <div class="item-name">{{ service.get_name }}</div>
+<div>${{ service.get_amount_to_pay }}</div>
+</div>
+
+    <hr class="second-part">
+
+<div class="service-payment">
+<div class="subTotal">
+    <div>{% trans "Subtotal" %}</div>
+<div>${{ service.get_amount_to_pay }}</div>
+</div>
+<div class="salesTax">
+    <div>{% trans "Sales Tax" %}</div>
+    <div id="sales-tax-field">${{ fee_amount }}</div>
+</div>
+    <hr class="second-part">
+<div class="total">
+    <div>{% trans "Total" %}</div>
+    <div id="sales-total-amount">${{ total_amount }}</div>
+</div>
+</div>
+</div>
+    <div class="securePayment">
+        <?xml version="1.0"?>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="15px" height="15px"
+             class="padlock">
+            <path d="M 15 2 C 11.145666 2 8 5.1456661 8 9 L 8 11 L 6 11 C 4.895 11 4 11.895 4 13 L 4 25 C 4 26.105 4.895 27 6 27 L 24 27 C 25.105 27 26 26.105 26 25 L 26 13 C 26 11.895 25.105 11 24 11 L 22 11 L 22 9 C 22 5.2715823 19.036581 2.2685653 15.355469 2.0722656 A 1.0001 1.0001 0 0 0 15 2 z M 15 4 C 17.773666 4 20 6.2263339 20 9 L 20 11 L 10 11 L 10 9 C 10 6.2263339 12.226334 4 15 4 z"/>
+        </svg>
+        <p>Secure Checkout</p>
+    </div>
+</div>
+</form>
+</div>
+</div>
+{% endblock %}
+{% block customJS %}
+<script>
+const object_id = "{{ object_id }}";
+const id_request = "{{ id_request }}";
+
+const createOrderURLTemplate = "{% url 'payment:create_order' object_id=0 %}";
+const captureOrderURLTemplate = "{% url 'payment:capture_order' order_id='0' %}";
+
+const createOrderURL = createOrderURLTemplate.replace("0", object_id);
+let funding_source = "paypal";
+paypal.Buttons({
+    onClick: function (data, actions) {
+        const fundingSource_ = data["fundingSource"]
+        console.log("New funding source selected", fundingSource_);
+        funding_source = fundingSource_;
+    },
+createOrder: function (data, actions) {
+    console.log("Inside createOrder, funding source is still ", funding_source);
+const createOrderURLWithFundingSource = `${createOrderURL}?funding_source=${funding_source}`;
+    return fetch(createOrderURLWithFundingSource, {
+        method: "POST",
+    })
+            .then((response) => response.json())
+            .then((order) => {
+                console.log("The order", order, JSON.stringify(order, null, 2));
+
+                const salesTaxField = document.getElementById("sales-tax-field");
+                salesTaxField.textContent = `$${order.fee}`;
+
+                const salesTotalField = document.getElementById("sales-total-amount");
+                salesTotalField.textContent = `$${order.total_amount}`;
+
+                return order.id;
+            });
+},
+
+    onApprove: function (data, actions) {
+        const captureOrderURL = captureOrderURLTemplate.replace("0", data.orderID);
+
+        return fetch(captureOrderURL, {
+            method: "POST",
+        })
+                .then((response) => response.json())
+                .then((orderData) => {
+                    console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
+                    window.location.href = `{% url 'payment:success_linked' object_id=object_id order_id='0' %}`.replace('/0', '/' + data.orderID);
+                });
+    },
+}).render("#paypal-button-container");
+
+document.addEventListener('DOMContentLoaded', function () {
+    const messageElements = document.querySelectorAll('.alert-dismissible');
+    setTimeout(function () {
+        messageElements.forEach(function (element) {
+            element.style.display = 'none';
+        });
+    }, 3000);
+});
+</script>
+
+{% endblock %}
