@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
+import dotenv
 
-from django_payment_manager.productions import PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_ENVIRONMENT
+dotenv.read_dotenv(override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -127,9 +128,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-PAYMENT_PAYPAL_ENVIRONMENT = PAYPAL_ENVIRONMENT
-PAYMENT_PAYPAL_CLIENT_ID = PAYPAL_CLIENT_ID
-PAYMENT_PAYPAL_CLIENT_SECRET = PAYPAL_CLIENT_SECRET
+PAYMENT_PAYPAL_ENVIRONMENT = os.environ.get("PAYPAL_ENVIRONMENT", "sandbox")
+PAYMENT_PAYPAL_CLIENT_ID = os.environ.get("PAYPAL_CLIENT_ID", "")
+PAYMENT_PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET", "")
 
 PAYMENT_BASE_TEMPLATE = 'homepage/base.html'
 PAYMENT_WEBSITE_NAME = 'CruelTouch'  # or your website name
