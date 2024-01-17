@@ -138,7 +138,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+django_payment_manager/.env
 .venv
 env/
 venv/
@@ -179,4 +179,3 @@ cython_debug/
 .DS_Store
 **/.DS_Store
 **/**/.DS_Store
-productions.py
