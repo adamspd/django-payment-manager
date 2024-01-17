@@ -138,7 +138,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+django_payment_manager/.env
 .venv
 env/
 venv/
