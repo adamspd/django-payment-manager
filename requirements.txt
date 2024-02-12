@@ -1,5 +1,5 @@
 Django==5.0.1
 requests==2.31.0
-setuptools~=69.0.3
+setuptools~=69.1.0
 django-appointment==3.0.1
 django-dotenv==1.4.2
