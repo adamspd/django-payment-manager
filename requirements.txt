@@ -1,4 +1,4 @@
-Django==5.0.6
+Django==5.0.7
 requests==2.32.3
 setuptools~=70.0.0
 django-appointment==3.6.0
